@@ -1,0 +1,16 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Lucida Console", "Courier New", monospace;
+}
+
+body {
+  background: #19600d;
+  color: #ffffff;
+}
+
+.wrapper {
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 20px;
+}

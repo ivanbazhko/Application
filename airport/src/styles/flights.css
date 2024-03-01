@@ -1,0 +1,38 @@
+  .flcontainer {
+    margin: 20px 0;
+    background: url('../img/airport_8.jpg') no-repeat;
+    width: 100%;
+    height: 550px;
+    background-size: cover;
+    background-position: center center;
+    background-blend-mode: multiply;
+    background-color: #909090;
+    position: relative;
+    display: flex;
+  }
+
+  .flleft-div {
+    width: 90%;
+    height: 85%;
+    margin-left: 50px;
+    margin-top: 20px;
+    border: 5px solid black;
+  }
+
+  .flright-div {
+    width: 30%;
+    height: 87%;
+    margin-top: 20px;
+    margin-left: 50px;
+    background-color: #cccccc80;
+    background-size: cover;
+    background-position: center center;
+    background-blend-mode: multiply;
+    position: relative;
+    display: flex;
+    overflow: auto;
+  }
+
+  .one-flight {
+
+  }

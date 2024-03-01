@@ -1,0 +1,24 @@
+header ul.nav {
+   float: right;
+   list-style: none;
+   margin-top: 25px;
+   margin-right: 70px;
+ }
+ 
+ header ul.nav li {
+   display: inline;
+   margin-right: 30px;
+   cursor: pointer;
+   font-size: 20px;
+   transition: opacity 300ms ease;
+ }
+ 
+ header ul.nav li:hover {
+   opacity: 0.5;
+ }
+ 
+ header .logo {
+   margin-left: 70px;
+   font-size: 60px;
+   font-weight: 900;
+ }

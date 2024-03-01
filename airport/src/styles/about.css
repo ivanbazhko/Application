@@ -1,0 +1,47 @@
+.aboutcontainer {
+    margin: 20px 0;
+    background: url('../img/sky.jpg') no-repeat;
+    width: auto;
+    height: 420px;
+    padding: 50px;
+    padding-left: 4%;
+    background-size: cover;
+    background-position: center center;
+    background-blend-mode: multiply;
+    background-color: #909090;
+    position: relative;
+    display: flex;
+    overflow: hidden;
+  }
+
+.shared-pics-styles {
+    width: 200px;
+    height: 200px;
+    margin: 10px;
+    background-size: cover;
+  }
+
+.aboutPicture {
+    width: 200px;
+    height: 200px;
+    margin: 10px;
+  }
+
+.aboutLeft {
+    width: 50%;
+  }
+
+.aboutRight {
+    width: 65%;
+    overflow: auto;
+    margin-left: 10%;
+  }
+
+.aboutPicRow {
+    display: flex;
+  }
+
+.aboutParagraph {
+    text-align: justify;
+    font-size: larger;
+}

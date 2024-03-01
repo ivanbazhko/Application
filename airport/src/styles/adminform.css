@@ -1,0 +1,52 @@
+.airport-form {
+    background-color: white;
+    border-radius: 10px;
+    padding: 25px;
+    height: 480px;
+    width: 28%;
+    color: red;
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 3%;
+    opacity: 0.8;
+}
+
+.admincontainer {
+    margin: 20px 0;
+    background: url('../img/airport_6.jpg') no-repeat;
+    width: 100%;
+    height: 2200px;
+    background-size: cover;
+    background-position: center center;
+    background-blend-mode: multiply;
+    background-color: #909090;
+    position: relative;
+}
+
+.airportaction {
+    display: flex;
+    width: 100%;
+}
+
+.airp-button {
+    background-color: rgb(75, 44, 21);
+    color: white;
+    padding: 20px 40px;
+    margin-left: 32%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.flight-form {
+    background-color: white;
+    border-radius: 10px;
+    padding: 25px;
+    height: 700px;
+    width: 28%;
+    color: red;
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 3%;
+    opacity: 0.8;
+}

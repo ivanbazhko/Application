@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2a589790-202c-42da-85bc-ba4770754212" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageOptionsProvider">
+    <option name="myAddOrReplace" value="1" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectId" id="2MpWMVNH7BdhvIarmrDszHfuwHQ" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/airportProject/server&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.example.LabsM.jpa" />
+      <recent name="com.example.LabsM.jpa.model" />
+      <recent name="com.example.LabsM.service" />
+      <recent name="com.example.LabsM.validator" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.LabsM.jpa.model" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.LabsMApplication">
+    <configuration name="LabsMApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.LabsM.LabsMApplication" />
+      <module name="LabsM" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.LabsM.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BulkControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="LabsM" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.LabsM.controller.*" />
+          <option name="ENABLED" value="false" />
+        </pattern>
+        <pattern>
+          <option name="PATTERN" value="com.example.LabsM.controller.TriangleBulkController" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.LabsM.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.example.LabsM.controller.BulkControllerTest" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="LabsM" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.LabsM.controller.*" />
+          <option name="ENABLED" value="false" />
+        </pattern>
+        <pattern>
+          <option name="PATTERN" value="com.example.LabsM.controller.TriangleController" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.LabsM.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.example.LabsM.controller.ControllerTest" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CountServiceTest" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+      <module name="LabsM" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.LabsM.service.CountService" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.LabsM.service" />
+      <option name="MAIN_CLASS_NAME" value="com.example.LabsM.service.CountServiceTest" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TriangleServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="LabsM" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.LabsM.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+        <pattern>
+          <option name="PATTERN" value="com.example.LabsM.service.TriangleService" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.LabsM.service" />
+      <option name="MAIN_CLASS_NAME" value="com.example.LabsM.service.TriangleServiceTest" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ValidatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="LabsM" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.LabsM.validator.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.LabsM.validator" />
+      <option name="MAIN_CLASS_NAME" value="com.example.LabsM.validator.ValidatorTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="testtry" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+      <module name="LabsM" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.LabsM.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.LabsM" />
+      <option name="MAIN_CLASS_NAME" value="com.example.LabsM.testtry" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.LabsMApplication" />
+        <item itemvalue="JUnit.ControllerTest" />
+        <item itemvalue="JUnit.ValidatorTest" />
+        <item itemvalue="JUnit.TriangleServiceTest" />
+        <item itemvalue="JUnit.BulkControllerTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2a589790-202c-42da-85bc-ba4770754212" name="Changes" comment="" />
+      <created>1678464957485</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1678464957485</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/.." />
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/LabsM$LabsMApplication.ic" NAME="LabsMApplication Coverage Results" MODIFIED="1680881578685" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.example.LabsM.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/LabsM$DataBaseServiceTest.ic" NAME="DataBaseServiceTest Coverage Results" MODIFIED="1683961903017" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.example.LabsM.service.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/LabsM$BulkControllerTest.ic" NAME="BulkControllerTest Coverage Results" MODIFIED="1684724547202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.example.LabsM.controller.TriangleBulkController</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/LabsM$testtry.ic" NAME="testtry Coverage Results" MODIFIED="1679903084445" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.example.LabsM.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/LabsM$ServiceTest.ic" NAME="TriangleServiceTest Coverage Results" MODIFIED="1682767799343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.example.LabsM.service.*</FILTER>
+      <FILTER>com.example.LabsM.service.TriangleService</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/LabsM$ControllerTest.ic" NAME="ControllerTest Coverage Results" MODIFIED="1684725584430" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.example.LabsM.controller.TriangleController</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/LabsM$All_in_LabsM.ic" NAME="All in LabsM Coverage Results" MODIFIED="1683911473857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/LabsM$CountServiceTest.ic" NAME="CountServiceTest Coverage Results" MODIFIED="1684724563148" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.example.LabsM.service.CountService</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/server$LabsMApplication.ic" NAME="LabsMApplication Coverage Results" MODIFIED="1708086492031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.example.LabsM.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/LabsM$ValidatorTest.ic" NAME="ValidatorTest Coverage Results" MODIFIED="1684724574088" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.example.LabsM.validator.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/LabsM$TriangleServiceTest.ic" NAME="TriangleServiceTest Coverage Results" MODIFIED="1684724568626" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.example.LabsM.service.TriangleService</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/LabsM$LabsMApplicationTests.ic" NAME="LabsMApplicationTests Coverage Results" MODIFIED="1684554184031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.example.LabsM.*</FILTER>
+    </SUITE>
+  </component>
+</project>
