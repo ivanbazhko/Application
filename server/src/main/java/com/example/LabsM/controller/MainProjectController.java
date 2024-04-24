@@ -8,6 +8,7 @@ import com.example.LabsM.entity.User;
 import com.example.LabsM.jpa.model.BookingModel;
 import com.example.LabsM.jpa.model.UserModel;
 import com.example.LabsM.service.DBService;
+import com.example.LabsM.service.MailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,10 @@ import java.util.UUID;
 @CrossOrigin(origins = "http://localhost:3000")
 public class MainProjectController {
     private DBService airportService;
-    public MainProjectController(DBService airportService) {
+    private MailService mailService;
+    public MainProjectController(DBService airportService, MailService mailService) {
         this.airportService = airportService;
+        this.mailService = mailService;
     }
     @GetMapping("/addairline")
     @ResponseStatus(HttpStatus.OK)
@@ -166,7 +169,7 @@ public class MainProjectController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @GetMapping("deleteflight")
+    @GetMapping("/deleteflight")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> deleteFlight(@RequestParam String airline, @RequestParam Integer number) {
         List<Object> response = new ArrayList<>();
@@ -207,6 +210,7 @@ public class MainProjectController {
                 resNew.add(newPassword);
                 resNew.add(isAdmin);
             }
+            mailService.sendConfirmationCode(email);
             resNew.add(Boolean.TRUE);
             return new ResponseEntity<>(resNew, HttpStatus.CREATED);
         }

@@ -7,6 +7,7 @@ import MainPage from './components/MainPage';
 import AccountPage from './components/AccountPage';
 import AboutPage from './components/AboutPage';
 import AirportForm from './components/AirportForm.js';
+import GetCoordinates from './components/Coordinates.js';
 
 function App() {
   return (

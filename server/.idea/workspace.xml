@@ -54,9 +54,9 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.example.LabsM.service" />
       <recent name="com.example.LabsM.jpa" />
       <recent name="com.example.LabsM.jpa.model" />
-      <recent name="com.example.LabsM.service" />
       <recent name="com.example.LabsM.validator" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">

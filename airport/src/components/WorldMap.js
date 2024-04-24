@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import "leaflet/dist/leaflet.css"
-import { MapContainer, Marker, TileLayer, Popup } from "react-leaflet"
-import { Icon } from "leaflet"
+import { MapContainer, Marker, TileLayer, Popup, Polyline } from "react-leaflet"
+import { Icon, L } from "leaflet"
+import GetCoordinates from './Coordinates'
+import "leaflet-rotatedmarker"
 
 export default function WorldMap() {
 
@@ -16,6 +18,8 @@ export default function WorldMap() {
     name: "",
     country: ""
   }
+
+  var arr1, arr2;
 
   const getCoords = () => {
     axios
@@ -57,7 +61,9 @@ export default function WorldMap() {
 
   const homeIcon = new Icon({
     iconUrl: "https://www.iconpacks.net/icons/2/free-airport-location-icon-2959-thumb.png",
-    iconSize: [50, 50]
+    iconSize: [50, 50],
+    iconAnchor: [25, 25],
+    className: "homeIcon"
   })
 
   const customIcon = new Icon({
@@ -73,15 +79,29 @@ export default function WorldMap() {
       />
 
       {homes.map(coord => (
-      <Marker position={[coord.coord1, coord.coord2]} icon={homeIcon}>
-        <Popup className="mapPopUp">{coord.name},{coord.country}</Popup>
-      </Marker>
+        home.coord1 = coord.coord1,
+        home.coord2 = coord.coord2,
+        <Marker position={[coord.coord1, coord.coord2]} icon={homeIcon}>
+          <Popup className="mapPopUp">{coord.name}, {coord.country}</Popup>
+        </Marker>
       ))}
 
       {coords.map(coord => (
         <Marker position={[coord.coord1, coord.coord2]} icon={customIcon}>
           <Popup className="mapPopUp">{coord.name}, {coord.country}</Popup>
         </Marker>
+      ))}
+
+      {coords.map(coord => (
+        arr1 = GetCoordinates([home.coord1, home.coord2], [coord.coord1, coord.coord2]).r1,
+        <Polyline positions={arr1} color='blue'>
+        </Polyline>
+      ))}
+
+      {coords.map(coord => (
+        arr2 = GetCoordinates([home.coord1, home.coord2], [coord.coord1, coord.coord2]).r2,
+        <Polyline positions={arr2} color='blue'>
+        </Polyline>
       ))}
 
     </MapContainer>
