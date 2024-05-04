@@ -71,7 +71,7 @@ public class DBService {
         AirportModel model = new AirportModel(name, country, coord1, coord2);
         airportRepository.save(model);
     }
-        public List<AirportModel> getAllAirportsWithId() {
+    public List<AirportModel> getAllAirportsWithId() {
         List<AirportModel> result = new ArrayList<>();
         airportRepository.findAll().forEach(a -> {
             result.add(a);
@@ -89,6 +89,13 @@ public class DBService {
         });
         return result;
     }
+//    public List<AirportModel> getAllAirportsWithId() {
+//        List<AirportModel> result = new ArrayList<>();
+//        airportRepository.findAll().forEach(a -> {
+//            result.add(new AirportModel(a.getName(), a.getCountry(), a.getCoord1(), a.getCoord2()));
+//        });
+//        return result;
+//    }
     public void deleteAirport(Integer airportId) {
         airportRepository.deleteById(airportId);
     }

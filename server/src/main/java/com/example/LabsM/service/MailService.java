@@ -12,26 +12,6 @@ import java.util.Random;
 
 @Service
 public class MailService {
-//    private MailSender mailSender;
-//    private SimpleMailMessage templateMessage;
-//    public void setMailSender() {
-//        this.mailSender = new MailSender() {
-//            @Override
-//            public void send(SimpleMailMessage simpleMessage) throws MailException {
-//
-//            }
-//
-//            @Override
-//            public void send(SimpleMailMessage... simpleMessages) throws MailException {
-//
-//            }
-//        };
-//    }
-//    public void setTemplateMessage(String email) {
-//        this.templateMessage = new SimpleMailMessage();
-//        this.templateMessage.setCc("thebestairportever@gmail.com");
-//        this.templateMessage.setSubject("Confirmation Code");
-//    }
     @Autowired
     private MailSender mailSender;
     public void sendConfirmationCode(String email) {

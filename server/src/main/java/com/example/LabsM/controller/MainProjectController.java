@@ -8,6 +8,7 @@ import com.example.LabsM.entity.User;
 import com.example.LabsM.jpa.model.BookingModel;
 import com.example.LabsM.jpa.model.UserModel;
 import com.example.LabsM.service.DBService;
+import com.example.LabsM.service.FlightsService;
 import com.example.LabsM.service.MailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,11 @@ import java.util.UUID;
 public class MainProjectController {
     private DBService airportService;
     private MailService mailService;
-    public MainProjectController(DBService airportService, MailService mailService) {
+    private FlightsService flightsService;
+    public MainProjectController(DBService airportService, MailService mailService, FlightsService flightsService) {
         this.airportService = airportService;
         this.mailService = mailService;
+        this.flightsService = flightsService;
     }
     @GetMapping("/addairline")
     @ResponseStatus(HttpStatus.OK)
@@ -225,5 +228,10 @@ public class MainProjectController {
         return new ResponseEntity<>(resOld, HttpStatus.OK);
     }
 
-
+    @GetMapping("/getactiveflights")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object> getFlyingPlanes() {
+        System.out.println("Requested active flights");
+        return new ResponseEntity<>(flightsService.getActiveFlights(), HttpStatus.OK);
+    };
 }

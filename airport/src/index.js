@@ -11,6 +11,7 @@ import './styles/account.css';
 import './styles/about.css';
 import './styles/worldmap.css';
 import './styles/adminform.css';
+import './styles/custommarker.css'
 import App from './App';
 import AuthComponent from './components/AuthComponent';
 

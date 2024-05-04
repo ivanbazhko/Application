@@ -118,14 +118,14 @@ const AirportForm = () => {
                 </div>
 
                 <div className='form-field'>
-                    <label className="form-label" htmlFor="longitude">Longitude:</label>
+                    <label className="form-label" htmlFor="longitude">Latitude:</label>
                     <input type="number" id="longitude" name="longitude" className="login-input" value={airportData.longitude}
                         onChange={handleChange} />
                     <span className="error-message">{errors.longitude}</span>
                 </div>
 
                 <div className='form-field'>
-                    <label className="form-label" htmlFor="latitude">Latitude:</label>
+                    <label className="form-label" htmlFor="latitude">Longitude:</label>
                     <input type="number" id="latitude" name="latitude" className="login-input" value={airportData.latitude}
                         onChange={handleChange} />
                     <span className="error-message">{errors.latitude}</span>

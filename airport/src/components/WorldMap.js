@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import "leaflet/dist/leaflet.css"
 import { MapContainer, Marker, TileLayer, Popup, Polyline } from "react-leaflet"
 import { Icon, L } from "leaflet"
 import GetCoordinates from './Coordinates'
 import "leaflet-rotatedmarker"
+import { getRandomPoint, getPoints1 } from './Coordinates'
+import CustomMarker from './CustomMarker'
 
 export default function WorldMap() {
 
   const [coords, setCoords] = useState([]);
   const [homes, setHomes] = useState([]);
-  var coords_n, home_n
+  const [activePlanes, setActivePlanes] = useState([]);
+  var coords_n, home_n, active_n
 
   var home = {
     coord1: 0.0,
@@ -19,7 +22,7 @@ export default function WorldMap() {
     country: ""
   }
 
-  var arr1, arr2;
+  var arr1, arr2, arr3;
 
   const getCoords = () => {
     axios
@@ -45,19 +48,43 @@ export default function WorldMap() {
       });
   };
 
+  const getActives = () => {
+    axios
+      .get('http://localhost:8080/api/airport/getactiveflights')
+      .then(response => {
+        active_n = response.data.map(item => item);
+        setActivePlanes(response.data);
+        console.log(activePlanes);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    getCoords();
+    getHome();
+    getActives();
+  }, []);
+
+  useEffect(() => {
+    checkState();
+  }, [coords, homes]);
+
   const checkState = () => {
     // console.log(coords);
     // console.log(homes);
   }
 
   useEffect(() => {
-    getCoords();
-    getHome();
-  }, []);
+    const interval = setInterval(() => {
+      getActives();
+    }, 5000);
 
-  useEffect(() => {
-    checkState();
-  }, [coords, homes]);
+    return () => {
+        clearInterval(interval);
+    };
+}, []);
 
   const homeIcon = new Icon({
     iconUrl: "https://www.iconpacks.net/icons/2/free-airport-location-icon-2959-thumb.png",
@@ -69,6 +96,13 @@ export default function WorldMap() {
   const customIcon = new Icon({
     iconUrl: "https://cdn-icons-png.flaticon.com/512/6618/6618280.png",
     iconSize: [33, 33]
+  })
+
+  const movIcon = new Icon({
+    iconUrl: "https://images.vexels.com/media/users/3/157085/isolated/preview/96b2c67a9d3d2d78379107717f60f3b7-transport-airplane-top-view-silhouette.png",
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+    className: "airplaneIcon"
   })
 
   return (
@@ -95,13 +129,21 @@ export default function WorldMap() {
       {coords.map(coord => (
         arr1 = GetCoordinates([home.coord1, home.coord2], [coord.coord1, coord.coord2]).r1,
         <Polyline positions={arr1} color='blue'>
+          <Popup className="mapPopUp2">{homes[0].name} - {coord.name}</Popup>
         </Polyline>
       ))}
 
       {coords.map(coord => (
         arr2 = GetCoordinates([home.coord1, home.coord2], [coord.coord1, coord.coord2]).r2,
         <Polyline positions={arr2} color='blue'>
+          <Popup className="mapPopUp2">{homes[0].name} - {coord.name}</Popup>
         </Polyline>
+      ))}
+
+      {activePlanes.map(point => (
+        arr3 = getPoints1(home.coord1, home.coord2, point),
+        // console.log(arr3),
+        <CustomMarker key={arr3.id} point={arr3} movIcon={movIcon} />
       ))}
 
     </MapContainer>
