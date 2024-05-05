@@ -143,7 +143,7 @@ public class MainProjectController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> addFlight(@RequestParam String destination, @RequestParam String airline,
                           @RequestParam String airplane, @RequestParam String days, @RequestParam String time,
-                          @RequestParam Integer number) {
+                          @RequestParam Integer number, @RequestParam Integer origin) {
         List<Object> response = new ArrayList<>();
         Integer err = 0;
         Integer exDe = airportService.getAirportId(destination);
@@ -168,7 +168,7 @@ public class MainProjectController {
             response.add(Boolean.TRUE);
         };
         if(err == 0) {
-            airportService.saveOneFlight(destination, airline, airplane, days, time, number);
+            airportService.saveOneFlight(destination, airline, airplane, days, time, number, origin);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

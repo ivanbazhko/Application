@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { AuthContext } from './AuthComponent';
 import { useNavigate } from 'react-router-dom';
 
-const makeRequest = (destination, airline, airplane, days, time, number) => {
+const makeRequest = (destination, airline, airplane, days, time, number, origin) => {
     const params = {
         destination: destination,
         airline: airline,
@@ -12,8 +12,10 @@ const makeRequest = (destination, airline, airplane, days, time, number) => {
         days: days,
         time: time,
         number: number,
+        origin: origin,
     };
     return new Promise((resolve, reject) => {
+        console.log("PARAMS: ", params);
         axios.get('http://localhost:8080/api/airport/addflight', { params })
             .then(response => {
                 resolve(response.data);
@@ -35,6 +37,7 @@ const FlightForm = () => {
         days: '',
         time: '',
         number: '',
+        origin: '',
     });
 
     const [errors, setErrors] = useState({
@@ -47,8 +50,10 @@ const FlightForm = () => {
     });
 
     const handleChange = (event) => {
+
         const { name, value } = event.target;
         setFlightData({ ...flightData, [name]: value });
+
     };
 
     const handleSubmit = (event) => {
@@ -83,8 +88,15 @@ const FlightForm = () => {
 
         if (!destinationError && !airlineError && !airplaneError && !numberError && !daysError && !timeError) {
             console.log('Adding flight:', flightData);
+            var checkedorigin;
+            var checkbox = document.getElementsByName("origin")[0];
+            if (checkbox.checked) {
+                checkedorigin = -1;
+            } else {
+                checkedorigin = 1;
+            }
             makeRequest(flightData.destination, flightData.airline, flightData.airplane,
-                flightData.days, flightData.time, flightData.number)
+                flightData.days, flightData.time, flightData.number, checkedorigin)
                 .then(data => {
                     console.log("Request successful:", data);
                     if (!data[0]) {
@@ -160,6 +172,13 @@ const FlightForm = () => {
                     <input type="number" id="number" name="number" className="login-input" value={flightData.number}
                         onChange={handleChange} />
                     <span className="error-message">{errors.number}</span>
+                </div>
+
+                <div className='form-field'>
+                    <label className="form-label">
+                        <input type="checkbox" name="origin" value="1" onChange={handleChange} />
+                        {" Other Origin"}
+                    </label>
                 </div>
 
                 <button className="airp-button" type="submit" onClick={handleSubmit}>

@@ -12,6 +12,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -91,6 +93,7 @@ public class FlightsService {
 //        System.out.println("Current day of the week: " + currentDay);
         allflights.forEach(a -> {
 //            System.out.println("Days: " + a.getDays());
+            Integer origin = a.getOrigin();
             Integer activity = 0;
             String airport = a.getDestination().getCountry();
             Integer airportId = dbService.getAirportId(airport);
@@ -188,6 +191,25 @@ public class FlightsService {
                         progress = Math.round(travelled / totaldistance * 1000);
                         if(direction == -1) progress = 1000 - progress;
                         String image = a.getAirline().getLogo();
+
+
+
+                        if(origin == -1) {
+                            direction *= -1;
+                            progress = 1000 - progress;
+                            String[] words = dirstring.split(" ");
+                            Collections.reverse(Arrays.asList(words));
+                            dirstring = String.join(" ", words);
+                            if(direction == 1) {
+                                Integer newnum = a.getNumber() + 1;
+                                fnstring = a.getAirline().getCode() + ' ' + newnum.toString();
+                            } else {
+                                Integer newnum = a.getNumber();
+                                fnstring = a.getAirline().getCode() + ' ' + newnum.toString();
+                            }
+                        }
+
+
                         AirplaneOnMap figure = new AirplaneOnMap(a.getDestination().getCoord1(), a.getDestination().getCoord2(),
                                     airport, direction, progress, dirstring, fnstring, image, departure, arrival, a.getAirplane());
                         result.add(figure);

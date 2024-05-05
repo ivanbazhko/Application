@@ -201,9 +201,9 @@ public class DBService {
 
     ////////////////////////////////////////////////////////////////////////////
     public void saveOneFlight(String destination, String airline,
-                              String airplane, String days, String time, Integer number) {
+                              String airplane, String days, String time, Integer number, Integer origin) {
         FlightModel model = new FlightModel(getAirportId(destination),
-                getAirlineId(airline), airplane, days, time, number);
+                getAirlineId(airline), airplane, days, time, number, origin);
         flightRepository.save(model);
     }
     public List<FlightModel> getAllFlightsWithId() {
@@ -254,7 +254,7 @@ public class DBService {
             }
             result.add(new Flight(getAllAirports().get(airportId),
                     getAllAirlines().get(airlineId), a.getAirplaneid(), a.getDays(),
-                    a.getTime(), a.getNumber()));
+                    a.getTime(), a.getNumber(), a.getOrigin()));
         });
         return result;
     }

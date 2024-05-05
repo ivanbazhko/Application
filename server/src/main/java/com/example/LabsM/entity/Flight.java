@@ -7,15 +7,25 @@ public class Flight {
     private String days;
     private String time;
     private Integer number;
+    private Integer origin;
+
+    public Integer getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(Integer origin) {
+        this.origin = origin;
+    }
 
     public Flight(Airport destination, Airline airline, String airplane, String days,
-                  String time, Integer number) {
+                  String time, Integer number, Integer origin) {
         this.destination = destination;
         this.airline = airline;
         this.airplane = airplane;
         this.days = days;
         this.time = time;
         this.number = number;
+        this.origin = origin;
     }
 
     public Flight() {
@@ -25,6 +35,7 @@ public class Flight {
         this.days = "";
         this.time = "";
         this.number = -1;
+        this.origin = 1;
     }
 
     public Airport getDestination() {
