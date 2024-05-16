@@ -1,19 +1,19 @@
 package com.example.LabsM.controller;
 
 import com.example.LabsM.annotation.CustomExceptionHandler;
-import com.example.LabsM.entity.Airport;
-import com.example.LabsM.entity.Booking;
-import com.example.LabsM.entity.Flight;
-import com.example.LabsM.entity.User;
+import com.example.LabsM.entity.*;
 import com.example.LabsM.jpa.model.BookingModel;
 import com.example.LabsM.jpa.model.UserModel;
 import com.example.LabsM.service.DBService;
 import com.example.LabsM.service.FlightsService;
 import com.example.LabsM.service.MailService;
+import com.example.LabsM.service.SockService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -26,10 +26,12 @@ public class MainProjectController {
     private DBService airportService;
     private MailService mailService;
     private FlightsService flightsService;
-    public MainProjectController(DBService airportService, MailService mailService, FlightsService flightsService) {
+    private SockService sockService;
+    public MainProjectController(DBService airportService, MailService mailService, FlightsService flightsService, SockService sockService) {
         this.airportService = airportService;
         this.mailService = mailService;
         this.flightsService = flightsService;
+        this.sockService = sockService;
     }
     @GetMapping("/addairline")
     @ResponseStatus(HttpStatus.OK)
@@ -102,16 +104,11 @@ public class MainProjectController {
     @GetMapping("/bookingSearch")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> bookingSearch(@RequestParam String destination, @RequestParam Integer amount,
-                                                @RequestParam String date) {
+                                                @RequestParam String date, @RequestParam Integer origin) {
         List<Object> response = new ArrayList<>();
-        Flight resp = airportService.getForBooking(destination, amount, date);
+        List<Search> resp = flightsService.getForBooking(destination, amount, date, origin);
         response.add(resp);
-        if(!resp.getDestination().getCountry().equals(destination)) {
-            response.add(Boolean.FALSE);
-        } else {
-            response.add(Boolean.TRUE);
-        };
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(resp, HttpStatus.OK);
     }
     @GetMapping("/bookings")
     @ResponseStatus(HttpStatus.OK)
@@ -129,9 +126,9 @@ public class MainProjectController {
     }
     @GetMapping("/addbooking")
     @ResponseStatus(HttpStatus.OK)
-    public void addBooking(@RequestParam String email, @RequestParam String airline,
-                           @RequestParam Integer number, @RequestParam String date) {
-        airportService.saveOneBooking(email, airline + number, date);
+    public void addBooking(@RequestParam String email, @RequestParam String number,
+                           @RequestParam String date, @RequestParam String time, @RequestParam Float price, @RequestParam String route) {
+        airportService.saveOneBooking(email, number, date, time, price, route);
     }
     @GetMapping("/flights")
     @ResponseStatus(HttpStatus.OK)
@@ -143,7 +140,7 @@ public class MainProjectController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> addFlight(@RequestParam String destination, @RequestParam String airline,
                           @RequestParam String airplane, @RequestParam String days, @RequestParam String time,
-                          @RequestParam Integer number, @RequestParam Integer origin) {
+                          @RequestParam Integer number, @RequestParam Integer origin, @RequestParam Float price) {
         List<Object> response = new ArrayList<>();
         Integer err = 0;
         Integer exDe = airportService.getAirportId(destination);
@@ -168,7 +165,7 @@ public class MainProjectController {
             response.add(Boolean.TRUE);
         };
         if(err == 0) {
-            airportService.saveOneFlight(destination, airline, airplane, days, time, number, origin);
+            airportService.saveOneFlight(destination, airline, airplane, days, time, number, origin, price);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -213,7 +210,6 @@ public class MainProjectController {
                 resNew.add(newPassword);
                 resNew.add(isAdmin);
             }
-            mailService.sendConfirmationCode(email);
             resNew.add(Boolean.TRUE);
             return new ResponseEntity<>(resNew, HttpStatus.CREATED);
         }
@@ -228,10 +224,75 @@ public class MainProjectController {
         return new ResponseEntity<>(resOld, HttpStatus.OK);
     }
 
+    @GetMapping("/sendconfirmationmail")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object> sendConfirm(@RequestParam String email) {
+        return new ResponseEntity<>(mailService.sendConfirmationCode(email), HttpStatus.OK);
+    };
+
     @GetMapping("/getactiveflights")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> getFlyingPlanes() {
         System.out.println("Requested active flights");
         return new ResponseEntity<>(flightsService.getActiveFlights(), HttpStatus.OK);
     };
+
+    @GetMapping("/getdomesticarrivals")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object> getDomesticArrivals() {
+        System.out.println("Requested domestic arrivals");
+        return null;
+    };
+
+    @GetMapping("/getallarrivals")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object> getAllArrivals() {
+        System.out.println("Requested all arrivals");
+        return null;
+    };
+
+    @GetMapping("/getdomesticdepartures")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object> getDomesticDepartures() {
+        System.out.println("Requested domestic departures");
+        return null;
+    };
+
+    @GetMapping("/getalldepartures")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object> getAllDepartures() {
+        System.out.println("Requested all departures");
+        return new ResponseEntity<>(flightsService.getAllDepartures(), HttpStatus.OK);
+    };
+    @PostMapping("/savepicture")
+    @ResponseStatus(HttpStatus.OK)
+    public void savePicture(@RequestParam MultipartFile picture) {
+        System.out.println("Requested saving picture");
+        try {
+            airportService.savePicture(picture.getBytes());
+        } catch (IOException e) {
+            System.out.println("ERROR GET BYTES");
+        }
+    };
+
+    @GetMapping("/getallpictures")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object> getAllPictures() {
+        System.out.println("Requested all pictures");
+        return new ResponseEntity<>(airportService.getAllImages(), HttpStatus.OK);
+    };
+
+
+
+
+
+
+    @GetMapping("/transaction")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object> makeTransaction(@RequestParam String cardnum, @RequestParam String code, @RequestParam Float amount,
+                                                  @RequestParam String airpacc) {
+        System.out.println("Requested Transaction");
+        Integer response = sockService.checkOp(cardnum, code, amount, airpacc);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

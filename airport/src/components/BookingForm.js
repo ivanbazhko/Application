@@ -3,17 +3,16 @@ import axios from 'axios'
 import { useContext } from 'react';
 import { AuthContext } from './AuthComponent';
 import { useNavigate } from 'react-router-dom';
+import { ShoppingCartContext } from './ShoppingCartContext';
 
 const BookingForm = () => {
-    const [coords, setCoords] = useState([]);
-    const [tta, setTta] = useState([]);
 
-    const [city, setCity] = useState([]);
-    const [airline, setAirline] = useState([]);
+    const { cartItems, addToCart, removeFromCart, getCartItems } = useContext(ShoppingCartContext);
+
+    const [coords, setCoords] = useState([]);
+    const [results, setResults] = useState([]);
     const [number, setNumber] = useState([]);
     const [code, setCode] = useState([]);
-    const [plane, setPlane] = useState([]);
-    const [logo, setLogo] = useState([]);
 
     var yu = "pakd";
     const [showBookingForm, setBookingForm] = useState(true);
@@ -21,23 +20,19 @@ const BookingForm = () => {
     const navigate = useNavigate();
     const { user, setUser } = useContext(AuthContext)
 
-    const makeRequest = (destination, amount, date) => {
+    const makeRequest = (destination, amount, date, origin) => {
         const params = {
             destination: destination,
             amount: amount,
-            date: date
+            date: date,
+            origin: origin,
         };
         console.log(params);
         return new Promise((resolve, reject) => {
             axios.get('http://localhost:8080/api/airport/bookingSearch', { params })
                 .then(response => {
-                    setTta(response.data[0]);
-                    setAirline(response.data[0].airline.name)
-                    setCode(response.data[0].airline.code)
-                    setNumber(response.data[0].number)
-                    setCity(response.data[0].destination.name)
-                    setPlane(response.data[0].airplane)
-                    setLogo(response.data[0].airline.logo)
+                    setResults(response.data);
+                    console.log("got ", results)
                     resolve(response.data);
                 })
                 .catch(error => {
@@ -46,27 +41,9 @@ const BookingForm = () => {
         });
     };
 
-    const makeBookingRequest = (email, airline, number, date) => {
-        const params = {
-            email: email,
-            airline: airline,
-            number: number,
-            date: date,
-        };
-        console.log(params);
-        return new Promise((resolve, reject) => {
-            axios.get('http://localhost:8080/api/airport/addbooking', { params })
-                .then(response => {
-                })
-                .catch(error => {
-                    reject(error);
-                });
-        });
-    };
-
     const checkState = () => {
-        console.log(coords);
-        console.log(tta);
+        // console.log(coords);
+        // console.log(tta);
     }
 
     useEffect(() => {
@@ -77,6 +54,7 @@ const BookingForm = () => {
         destination: '',
         amount: '',
         date: '',
+        origin: '',
     });
 
     const [errors, setErrors] = useState({
@@ -104,20 +82,30 @@ const BookingForm = () => {
         });
 
         if (!amountError && !dateError && !destError) {
-            makeRequest(bookingData.destination, bookingData.amount, bookingData.date).then(data => {
+            var checkedorigin;
+            var checkbox = document.getElementsByName("origin")[0];
+            if (checkbox.checked) {
+                checkedorigin = -1;
+            } else {
+                checkedorigin = 1;
+            }
+            makeRequest(bookingData.destination, bookingData.amount, bookingData.date, checkedorigin).then(data => {
                 console.log("Request successful:", data);
                 setCoords(data);
-                console.log(coords);
-                console.log(tta);
-                if (!data[1]) {
+                if (!data) {
                     setErrors({
                         destination: 'No matches found',
                     });
-                };
-                if (data[1]) {
-                    setBookingForm(false);
-                    setSearch(true);
-                }
+                } else
+                    if (data.length > 0) {
+                        setBookingForm(false);
+                        setSearch(true);
+                    } else
+                        if (data.length == 0) {
+                            setErrors({
+                                destination: 'No flights found',
+                            });
+                        }
             })
                 .catch(error => {
                     console.error("Request failed:", error);
@@ -125,12 +113,10 @@ const BookingForm = () => {
         }
     };
 
-    const handleBookSubmit = (event) => {
+    const handleBookSubmit = (object, event) => {
         event.preventDefault();
-        if (user) {
-            makeBookingRequest(user.email, code, number, bookingData.date).then(data => {
-            });
-        }
+        console.log(object);
+        addToCart(object);
         setBookingForm(true);
         setSearch(false);
     };
@@ -183,6 +169,13 @@ const BookingForm = () => {
                         <span className="error-message">{errors.date}</span>
                     </div>
 
+                    <div className='form-field'>
+                        <label className="form-label">
+                            <input type="checkbox" name="origin" value="1" onChange={handleChange} />
+                            {" Other Origin"}
+                        </label>
+                    </div>
+
                     <button type="submit" className="search-button" onClick={handleSubmit}>
                         Search
                     </button>
@@ -194,18 +187,25 @@ const BookingForm = () => {
             <div className="booking-form">
                 <div className="form-header">
                     <h2 className="form-title">Results</h2>
-                    {(
-                        <div className="inp_f">
-                            {city}<br />
-                            {airline}<br />
-                            {plane}<br />
-                            {code}{number}<br />
-                            <img className="srcimg" src={logo}></img><br />
-                            <button className="src-button" type="submit" onClick={handleBookSubmit}>
-                                Book
-                            </button>
-                        </div>
-                    )}
+                    <div className="reswrap">
+                        {
+                            results.map(result => (
+                                <div className="inp_f">
+                                    {result.destination}{' ('}
+                                    {result.code}{')'}<br />
+                                    {result.airline}{' ('}{result.number}{')'}<br />
+                                    {result.airplane}<br />
+                                    {'Departure: '}{result.time}<br />
+                                    {'Flight time: '}{result.flighttime}<br />
+                                    {result.price}{'$'}<br />
+                                    <img className="srcimg" src={result.logo}></img><br />
+                                    <button className="src-button" type="submit" onClick={(e) => handleBookSubmit(result, e)}>
+                                        Book
+                                    </button>
+                                </div>
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
         );

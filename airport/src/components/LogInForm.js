@@ -25,6 +25,7 @@ const makeRequest = (name, password, rawpassword) => {
 };
 
 const LoginForm = () => {
+    var mailing = 0;
     const navigate = useNavigate();
     const{ user, setUser } = useContext(AuthContext)
     if(!user) console.log("Not logged")

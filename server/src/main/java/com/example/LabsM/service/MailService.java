@@ -14,7 +14,7 @@ import java.util.Random;
 public class MailService {
     @Autowired
     private MailSender mailSender;
-    public void sendConfirmationCode(String email) {
+    public Integer sendConfirmationCode(String email) {
         System.out.println(email);
         Random random = new Random();
         int code = 1000 + random.nextInt(8999);
@@ -30,6 +30,7 @@ public class MailService {
             System.out.println("Error has happened");
             System.err.println(ex.getMessage());
         }
+        return code;
     }
 
 }

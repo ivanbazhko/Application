@@ -22,6 +22,17 @@ public class FlightModel {
     @Column(name = "number")
     private Integer number;
 
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
+    }
+
+    @Column(name = "price")
+    private Float price;
+
     public Integer getOrigin() {
         return origin;
     }
@@ -98,10 +109,11 @@ public class FlightModel {
         this.time = "";
         this.number = -1;
         this.origin = 1;
+        this.price = (float)0;
     }
 
     public FlightModel(Integer id, Integer destinationid, Integer airlineid,
-                       String airplaneid, String days, String time, Integer number, Integer origin) {
+                       String airplaneid, String days, String time, Integer number, Integer origin, Float price) {
         this.id = id;
         this.destinationid = destinationid;
         this.airlineid = airlineid;
@@ -110,10 +122,11 @@ public class FlightModel {
         this.time = time;
         this.number = number;
         this.origin = origin;
+        this.price = price;
     }
 
     public FlightModel(Integer destinationid, Integer airlineid,
-                       String airplaneid, String days, String time, Integer number, Integer origin) {
+                       String airplaneid, String days, String time, Integer number, Integer origin, Float price) {
         this.destinationid = destinationid;
         this.airlineid = airlineid;
         this.airplaneid = airplaneid;
@@ -121,5 +134,6 @@ public class FlightModel {
         this.time = time;
         this.number = number;
         this.origin = origin;
+        this.price = price;
     }
 }

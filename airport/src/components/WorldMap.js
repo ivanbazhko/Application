@@ -41,7 +41,7 @@ export default function WorldMap() {
       .get('http://localhost:8080/api/airport/home')
       .then(response => {
         home_n = response.data.map(item => item);
-        setHomes(response.data)
+        setHomes(response.data);
       })
       .catch(error => {
         console.error(error);
@@ -54,7 +54,6 @@ export default function WorldMap() {
       .then(response => {
         active_n = response.data.map(item => item);
         setActivePlanes(response.data);
-        console.log(activePlanes);
       })
       .catch(error => {
         console.error(error);
@@ -79,7 +78,7 @@ export default function WorldMap() {
   useEffect(() => {
     const interval = setInterval(() => {
       getActives();
-    }, 5000);
+    }, 15000);
 
     return () => {
         clearInterval(interval);
@@ -128,22 +127,23 @@ export default function WorldMap() {
 
       {coords.map(coord => (
         arr1 = GetCoordinates([home.coord1, home.coord2], [coord.coord1, coord.coord2]).r1,
+        homes.length > 0 ?
         <Polyline positions={arr1} color='blue'>
           <Popup className="mapPopUp2">{homes[0].name} - {coord.name}</Popup>
-        </Polyline>
+        </Polyline> : null
       ))}
 
       {coords.map(coord => (
         arr2 = GetCoordinates([home.coord1, home.coord2], [coord.coord1, coord.coord2]).r2,
+        homes.length > 0 ?
         <Polyline positions={arr2} color='blue'>
           <Popup className="mapPopUp2">{homes[0].name} - {coord.name}</Popup>
-        </Polyline>
+        </Polyline> : null
       ))}
 
       {activePlanes.map(point => (
-        arr3 = getPoints1(home.coord1, home.coord2, point),
-        // console.log(arr3),
-        <CustomMarker key={arr3.id} point={arr3} movIcon={movIcon} />
+        arr3 = homes.length > 0 ? getPoints1(home.coord1, home.coord2, point) : null,
+        homes.length > 0 ? <CustomMarker key={arr3.id} point={arr3} movIcon={movIcon} /> : null
       ))}
 
     </MapContainer>

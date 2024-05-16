@@ -8,6 +8,15 @@ public class Flight {
     private String time;
     private Integer number;
     private Integer origin;
+    private Float price;
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
+    }
 
     public Integer getOrigin() {
         return origin;
@@ -18,7 +27,7 @@ public class Flight {
     }
 
     public Flight(Airport destination, Airline airline, String airplane, String days,
-                  String time, Integer number, Integer origin) {
+                  String time, Integer number, Integer origin, Float price) {
         this.destination = destination;
         this.airline = airline;
         this.airplane = airplane;
@@ -26,6 +35,7 @@ public class Flight {
         this.time = time;
         this.number = number;
         this.origin = origin;
+        this.price = price;
     }
 
     public Flight() {
@@ -36,6 +46,7 @@ public class Flight {
         this.time = "";
         this.number = -1;
         this.origin = 1;
+        this.price = (float)0;
     }
 
     public Airport getDestination() {
@@ -85,4 +96,5 @@ public class Flight {
     public void setNumber(Integer number) {
         this.number = number;
     }
+
 }

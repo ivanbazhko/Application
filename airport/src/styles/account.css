@@ -2,7 +2,7 @@
   margin: 20px 0;
   background: url('../img/airport_6.jpg') no-repeat;
   width: 100%;
-  height: 550px;
+  height: 650px;
   background-size: cover;
   background-position: center center;
   background-blend-mode: multiply;
@@ -39,4 +39,9 @@
   flex-wrap: wrap;
   width: 80%;
   overflow: auto;
+}
+
+.welcome{
+  padding-left: 30px;
+  padding-top: 30px;
 }

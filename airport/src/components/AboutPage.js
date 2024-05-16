@@ -1,8 +1,42 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 
 export default function AboutPage() {
+
+    const [images, setImages] = useState([]);
+
+    var ims_n;
+
+    const getImages = async () => {
+        try {
+          const response = await axios.get('http://localhost:8080/api/airport/getallpictures');
+          const imageData = response.data;
+          console.log(response.data);
+
+          const imageUrls = imageData.map((image) =>
+            'data:image/jpeg;base64,' + image
+          );
+
+          // response.data.map(datapiece => {
+          //   imagesdatas += 'data:image/jpeg;base64,' + datapiece;
+          // })
+    
+          // setImages('data:image/jpeg;base64,' + response.data[1]);
+
+          setImages(imageUrls);
+
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+    useEffect(() => {
+        getImages();
+    }, []);
+
     return (
+        // console.log(images.length),
+        // console.log(images),
         <div className="aboutcontainer">
             <div className="aboutLeft">
                 <p className="aboutParagraph">
@@ -20,27 +54,10 @@ export default function AboutPage() {
                 </p>
             </div>
             <div className="aboutRight">
-                <div className="aboutPicRow">
-                    <img className="aboutPicture" src="https://github.com/ivanbazhko/potatis/blob/master/airport_1.jpg?raw=true" alt="airport" />
-                    <img className="aboutPicture" src="https://github.com/ivanbazhko/potatis/blob/master/airport_2.jpg?raw=true" alt="airport" />
-                    <img className="aboutPicture" src="https://github.com/ivanbazhko/potatis/blob/master/airport_3.jpg?raw=true" alt="airport" />
-                </div>
-                <div className="aboutPicRow">
-                    <img className="aboutPicture" src="https://github.com/ivanbazhko/potatis/blob/master/airport_4.jpg?raw=true" alt="airport" />
-                    <img className="aboutPicture" src="https://github.com/ivanbazhko/potatis/blob/master/airport_5.jpg?raw=true" alt="airport" />
-                    <img className="aboutPicture" src="https://github.com/ivanbazhko/potatis/blob/master/airport_6.jpg?raw=true" alt="airport" />
-                </div>
-                <div className="aboutPicRow">
-                    <img className="aboutPicture" src="https://github.com/ivanbazhko/potatis/blob/master/airport_7.jpg?raw=true" alt="airport" />
-                    <img className="aboutPicture" src="https://github.com/ivanbazhko/potatis/blob/master/airport_8.jpg?raw=true" alt="airport" />
-                    <img className="aboutPicture" src="https://github.com/ivanbazhko/potatis/blob/master/airport_9.jpg?raw=true" alt="airport" />
-                </div>
-                <div className="aboutPicRow">
-                    <img className="aboutPicture" src="https://github.com/ivanbazhko/potatis/blob/master/airport_10.jpg?raw=true" alt="airport" />
-                    <img className="aboutPicture" src="https://github.com/ivanbazhko/potatis/blob/master/airport_11.jpg?raw=true" alt="airport" />
-                    <img className="aboutPicture" src="https://github.com/ivanbazhko/potatis/blob/master/airport_12.jpg?raw=true" alt="airport" />
-                </div>
-            </div>
+            {images.map((image) =>
+              <img className="aboutPicture" src={image} alt="Airport" />
+            )}
+          </div>
         </div>
     )
 }

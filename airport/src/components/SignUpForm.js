@@ -23,19 +23,39 @@ const makeRequest = (name, password, rawpassword) => {
     });
 };
 
+const makeMailRequest = (name) => {
+    const params = {
+        email: name,
+    };
+    return new Promise((resolve, reject) => {
+        axios.get('http://localhost:8080/api/airport/sendconfirmationmail', { params })
+            .then(response => {
+                resolve(response.data);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+};
+
 const SignUpForm = () => {
-    const{ user, setUser } = useContext(AuthContext)
-    if(!user) console.log("Not logged")
-    
+    const { user, setUser } = useContext(AuthContext)
+    if (!user) console.log("Not logged")
+
     const [loginData, setLoginData] = useState({
         email: '',
         password: '',
+        confirmationCode: '',
     });
 
     const [errors, setErrors] = useState({
         email: '',
         password: '',
+        confirmationCode: '',
     });
+
+    const [showConfirmationInput, setShowConfirmationInput] = useState(false);
+    const [confirmationCode, setConfirmationCode] = useState('');
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -46,14 +66,32 @@ const SignUpForm = () => {
         event.preventDefault();
 
         const emailError = isValidEmail(loginData.email);
-        const passwordError = loginData.password.length == 0 ? true : false;
+        const passwordError = loginData.password.length === 0;
 
         setErrors({
             email: emailError ? 'Please enter a valid email address' : '',
             password: passwordError ? 'Please enter a password' : '',
+            confirmationCode: '',
         });
 
         if (!emailError && !passwordError) {
+            console.log('Sending confirmation email:', loginData.email);
+            makeMailRequest(loginData.email)
+                .then(data => {
+                    console.log("Confirmation email sent:", data);
+                    setConfirmationCode(data);
+                    setShowConfirmationInput(true);
+                })
+                .catch(error => {
+                    console.error("Failed to send confirmation email:", error);
+                });
+        }
+    };
+
+    const handleConfirmationSubmit = (event) => {
+        event.preventDefault();
+
+        if (loginData.confirmationCode == confirmationCode) {
             console.log('Signing up:', loginData);
             const salt = bcrypt.genSaltSync(10);
             const hashedPassword = bcrypt.hashSync(loginData.password, salt);
@@ -64,6 +102,7 @@ const SignUpForm = () => {
                         setErrors({
                             email: 'User with this e-mail already exists',
                             password: '',
+                            confirmationCode: '',
                         });
                     } else {
                         console.log(data);
@@ -77,12 +116,16 @@ const SignUpForm = () => {
                 .catch(error => {
                     console.error("Request failed:", error);
                 });
-        };
+        } else {
+            setErrors({
+                confirmationCode: 'Incorrect confirmation code',
+            });
+        }
     };
 
     const isValidEmail = (email) => {
         console.log(email.length);
-        if (email.length == 0) return true
+        if (email.length === 0) return true
         const regex = /^(([^<>()[\]\\.,;:\s@"]+)@([a-zA-Z0-9-]+).([a-zA-Z]{2,}))$/;
         return !regex.test(email);
     };
@@ -108,9 +151,24 @@ const SignUpForm = () => {
                     <span className="error-message">{errors.password}</span>
                 </div>
 
-                <button className="login-button" type="submit" onClick={handleSubmit}>
-                    Sign Up
-                </button>
+                {showConfirmationInput && (
+                    <div className='login-field'>
+                        <label className="login-label" htmlFor="confirmationCode">Confirmation Code:</label>
+                        <input id="confirmationCode" className="login-input" type="text" name="confirmationCode" value={loginData.confirmationCode}
+                            onChange={handleChange} />
+                        <span className="error-message">{errors.confirmationCode}</span>
+                    </div>
+                )}
+
+                {!showConfirmationInput ? (
+                    <button className="login-button" type="submit" onClick={handleSubmit}>
+                        Submit
+                    </button>
+                ) : (
+                    <button className="login-button" type="submit" onClick={handleConfirmationSubmit}>
+                        Confirm
+                    </button>
+                )}
             </form>
         </div>
     );

@@ -1,0 +1,58 @@
+.cartwrapper {
+    margin: 20px 0;
+    background: url('../img/airport_2.jpg') no-repeat;
+    width: 100%;
+    height: 550px;
+    background-size: cover;
+    background-position: center center;
+    background-blend-mode: multiply;
+    background-color: #909090;
+    position: relative;
+    /* display: flex; */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+    overflow-y: auto;
+}
+
+.cartitem {
+    color: black;
+    margin-top: 20px;
+    margin-left: 15%;
+    margin-bottom: 50px;
+    height: 250px;
+    width: 200px;
+    border: 1px solid black;
+    padding: 20px;
+    background-color: ghostwhite;
+}
+
+
+.booking1-form {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    height: 40%;
+    width: 65%;
+    color: black;
+    margin-top: 5%;
+    margin-left: 20%;
+    margin-bottom: 50px;
+  }
+  
+  .booking1-form-header {
+    text-align: center;
+  }
+  
+  .booking1-form-title {
+    color: forestgreen;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .booking1-form-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }

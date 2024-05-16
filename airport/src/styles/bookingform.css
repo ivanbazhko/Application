@@ -1,82 +1,87 @@
    .booking-form {
-    background-color: white;
-    border-radius: 10px;
-    padding: 20px;
-    height: 90%;
-    color: red;
-  }
-  
-  .form-header {
-    text-align: center;
-  }
-  
-  .form-title {
-    color: forestgreen;
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  .booking-form-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .form-field {
-    margin-bottom: 10px;
-    margin-right: 10px;
-    width: 100%;
-  }
-  
-  .form-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: black;
-    font-size: 20px;
-  }
-  
-  .form-input {
-    width: 100%;
-    height: 40px;
-    padding: 5px;
-    border: 2px solid black;
-    border-radius: 5px;
-    outline: none;
-  }
-  
-  .search-button {
-    background-color: rgb(75, 44, 21);
-    color: white;
-    padding: 20px 40px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+     background-color: white;
+     border-radius: 10px;
+     padding: 20px;
+     height: 90%;
+     color: red;
+   }
 
-  .inp_f {
-    color: black;
-    margin-top: 20px;
-    margin-left: 25%;
-    height: 200px;
-    width: 160px;
-    border: 1px solid black;
-    padding: 20px;
-  }
+   .form-header {
+     text-align: center;
+   }
 
-  .srcimg {
-    margin-top: 20px;
-    height: 50px;
-    width: 50px;
-  }
+   .form-title {
+     color: forestgreen;
+     font-size: 24px;
+     font-weight: bold;
+   }
 
-  .src-button {
-    margin-top: 20px;
-    background-color: rgb(75, 44, 21);
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+   .booking-form-body {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     margin-top: 20px;
+   }
+
+   .form-field {
+     margin-bottom: 10px;
+     margin-right: 10px;
+     width: 100%;
+   }
+
+   .form-label {
+     display: block;
+     margin-bottom: 5px;
+     font-weight: bold;
+     color: black;
+     font-size: 20px;
+   }
+
+   .form-input {
+     width: 100%;
+     height: 40px;
+     padding: 5px;
+     border: 2px solid black;
+     border-radius: 5px;
+     outline: none;
+   }
+
+   .search-button {
+     background-color: rgb(75, 44, 21);
+     color: white;
+     padding: 20px 40px;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+   }
+
+   .inp_f {
+     color: black;
+     margin-top: 20px;
+     margin-left: 15%;
+     height: 250px;
+     width: 250px;
+     border: 1px solid black;
+     padding: 20px;
+   }
+
+   .srcimg {
+     margin-top: 20px;
+     height: 50px;
+     width: 50px;
+   }
+
+   .src-button {
+     margin-top: 20px;
+     background-color: rgb(75, 44, 21);
+     color: white;
+     padding: 5px 10px;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+   }
+
+   .reswrap {
+     height: 350px;
+     overflow: auto;
+   }

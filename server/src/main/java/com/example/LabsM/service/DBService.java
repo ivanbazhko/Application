@@ -19,17 +19,35 @@ public class DBService {
     private BookingJpaRepository bookingRepository;
     private FlightJpaRepository flightRepository;
     private UserJpaRepository userRepository;
+    private PictureJpaRepository pictureRepository;
     public DBService(AirlineJpaRepository airlineRepository,
                      AirportJpaRepository airportRepository,
                      BookingJpaRepository bookingRepository,
                      FlightJpaRepository flightRepository,
-                     UserJpaRepository userRepository) {
+                     UserJpaRepository userRepository,
+                     PictureJpaRepository pictureRepository) {
         this.airlineRepository = airlineRepository;
         this.airportRepository = airportRepository;
         this.bookingRepository = bookingRepository;
         this.flightRepository = flightRepository;
         this.userRepository = userRepository;
+        this.pictureRepository = pictureRepository;
     }
+    ////////////////////////////////////////////////////////////////////////////
+
+    public void savePicture(byte[] image) {
+        PictureModel model = new PictureModel(image);
+        pictureRepository.save(model);
+    }
+
+    public List<byte[]> getAllImages() {
+        List<byte[]> result = new ArrayList<>();
+        pictureRepository.findAll().forEach(a -> {
+            result.add(a.getImage());
+        });
+        return result;
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     public void saveOneAirline(String name, String code, String logo) {
         AirlineModel model = new AirlineModel(name, code, logo);
@@ -143,8 +161,21 @@ public class DBService {
         return result;
     }
     ////////////////////////////////////////////////////////////////////////////
-    public void saveOneBooking(String userid, String flightid, String date) {
-        BookingModel model = new BookingModel(userid, flightid, date);
+    public void saveOneBooking(String userid, String flightid, String date, String time, Float price, String route) {
+        List<Flight> flights = getAllFlights();
+        Float priceone = (float)1;
+        Integer realnum = Integer.parseInt(flightid.substring(2));
+        if(realnum % 2 == 0) realnum -= 1;
+        String nn = flightid.substring(0, 2) + realnum.toString();
+        for(int i = 0; i < flights.size(); i++) {
+            String num = flights.get(i).getAirline().getCode() + flights.get(i).getNumber().toString();
+            if(num.equals(nn)) {
+                priceone = flights.get(i).getPrice();
+            }
+        }
+        System.out.println(priceone);
+        Integer amount = Math.round(price / priceone);
+        BookingModel model = new BookingModel(userid, flightid, date, time, price, amount, route);
         bookingRepository.save(model);
     }
     public List<BookingModel> getAllBookingsWithId() {
@@ -165,45 +196,12 @@ public class DBService {
 //        });
 //        return result;
 //    }
-    public Flight getForBooking(String destination, Integer amount, String date) {
-
-        // Parse the date string to a LocalDate object
-        LocalDate wdate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
-
-        // Get the day of the week
-        DayOfWeek dayOfWeek = wdate.getDayOfWeek();
-
-        // Print the day of the week
-        System.out.println(dayOfWeek.name()); // Prints: THURSDAY
-        System.out.println(dayOfWeek.getValue());
-
-        String lop = "12347";
-
-        if(lop.contains(String.valueOf(dayOfWeek.getValue()))) {
-            System.out.println("YAY");
-        }
-
-        Integer yes = 0;
-
-
-        List<Flight> flights = getAllFlights();
-        for(int i = 0; i < flights.size(); i++) {
-            if(flights.get(i).getDestination().getCountry().equals(destination)) {
-                if (flights.get(i).getDays().contains(String.valueOf(dayOfWeek.getValue()))) {
-                    yes = i;
-                    break;
-                }
-            }
-        }
-        Flight result = flights.get(yes);
-        return result;
-    }
 
     ////////////////////////////////////////////////////////////////////////////
     public void saveOneFlight(String destination, String airline,
-                              String airplane, String days, String time, Integer number, Integer origin) {
+                              String airplane, String days, String time, Integer number, Integer origin, Float price) {
         FlightModel model = new FlightModel(getAirportId(destination),
-                getAirlineId(airline), airplane, days, time, number, origin);
+                getAirlineId(airline), airplane, days, time, number, origin, price);
         flightRepository.save(model);
     }
     public List<FlightModel> getAllFlightsWithId() {
@@ -254,7 +252,7 @@ public class DBService {
             }
             result.add(new Flight(getAllAirports().get(airportId),
                     getAllAirlines().get(airlineId), a.getAirplaneid(), a.getDays(),
-                    a.getTime(), a.getNumber(), a.getOrigin()));
+                    a.getTime(), a.getNumber(), a.getOrigin(), a.getPrice()));
         });
         return result;
     }

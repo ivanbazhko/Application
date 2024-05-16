@@ -1,9 +1,6 @@
 package com.example.LabsM.service;
 
-import com.example.LabsM.entity.Airline;
-import com.example.LabsM.entity.AirplaneOnMap;
-import com.example.LabsM.entity.Airport;
-import com.example.LabsM.entity.Flight;
+import com.example.LabsM.entity.*;
 import com.example.LabsM.jpa.*;
 import com.example.LabsM.jpa.model.AirportModel;
 import org.springframework.stereotype.Service;
@@ -11,10 +8,8 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 public class FlightsService {
@@ -75,6 +70,7 @@ public class FlightsService {
         return totalHoursElapsed.floatValue();
     }
     public List<AirplaneOnMap> getActiveFlights() {
+        Integer totam = 0;
         List<AirplaneOnMap> result = new ArrayList<>();
         Integer speed = 900;
         Integer timeout = 120;
@@ -222,6 +218,498 @@ public class FlightsService {
 //            System.out.println("Activity: " + activity);
 
         });
+        totam = result.size();
+        System.out.println("Sent " + totam.toString() + " active flights");
         return result;
+    }
+
+    public static String incrementNumbers(String input) {
+        StringBuilder result = new StringBuilder();
+
+        for (char c : input.toCharArray()) {
+            if (Character.isDigit(c)) {
+                int num = Character.getNumericValue(c);
+                if (num == 7) {
+                    result.append(1);
+                } else {
+                    result.append((num % 7) + 1);
+                }
+            } else {
+                result.append(c);
+            }
+        }
+
+        return result.toString();
+    }
+
+    public List<Object> getAllDepartures () {
+        List<Object> response = new ArrayList<>();
+
+        List<TimetableRecord> result = new ArrayList<>();
+        List<TimetableRecord> finalresult = new ArrayList<>();
+        List<TimetableRecord> resultar = new ArrayList<>();
+        List<Flight> origflights = new ArrayList<>();
+        List<Flight> origflights0 = dbService.getAllFlights();
+        LocalTime currentTime = LocalTime.now();
+        Integer currentHour = currentTime.getHour();
+        Integer currentMinute = currentTime.getMinute();
+        Integer speed = 900;
+        Float homecoord1 = dbService.getAllAirportsWithId().get(0).getCoord1();
+        Float homecoord2 = dbService.getAllAirportsWithId().get(0).getCoord2();
+        String homecode = dbService.getAllAirportsWithId().get(0).getCountry();
+        LocalDate currentDate = LocalDate.now();
+        Integer currentDay = currentDate.getDayOfWeek().getValue();
+
+        origflights0.forEach(a -> {
+            Integer ordepHours = Integer.parseInt(a.getTime().split(":")[0]);
+            Integer ordepMinutes = Integer.parseInt(a.getTime().split(":")[1]);
+            String airport = a.getDestination().getCountry();
+            Integer airportId = dbService.getAirportId(airport);
+            Float destcoord1 = dbService.getAirportWithId(airportId).getCoord1();
+            Float destcoord2 = dbService.getAirportWithId(airportId).getCoord2();
+            Double totaldistance0 = calculateDistance(homecoord1.doubleValue(),
+                    homecoord2.doubleValue(), destcoord1.doubleValue(), destcoord2.doubleValue());
+            Float totaldistance = totaldistance0.floatValue();
+            Float flightTimeHours = totaldistance / speed;
+            Integer flHours = (int)Math.floor(flightTimeHours);
+            Integer flMinutes = Math.round((flightTimeHours - flHours) * 60);
+            Integer newDepHour = ordepHours + flHours + 2;
+            Integer newDepMinute = ordepMinutes + flMinutes;
+            Integer daysparam1 = 0;
+            Integer daysparam1_5 = 0;
+            Integer daysparam2 = 0;
+
+            if(newDepMinute > 59) {
+                newDepMinute -= 60;
+                newDepHour ++;
+            };
+            if(newDepHour > 23) {
+                newDepHour -= 24;
+                daysparam1_5 = 1;
+                daysparam1 = 1;
+                daysparam2 = 1;
+            };
+
+            Integer orarh = newDepHour - 2;
+            if(orarh < 0) {
+                orarh += 24;
+                daysparam1 = 0;
+            }
+            Integer orarm = newDepMinute;
+            Integer narh = newDepHour + flHours;
+            Integer narm = newDepMinute + flMinutes;
+            if(narm > 59) {
+                narm -= 60;
+                narh ++;
+            };
+            if(narh > 23) {
+                narh -= 24;
+                daysparam2 = daysparam1_5 + 1;
+            };
+
+            String dir1 = dbService.getAllAirportsWithId().get(0).getCountry() + " -> " + a.getDestination().getCountry();
+            String dir2 = a.getDestination().getCountry() + " -> " + dbService.getAllAirportsWithId().get(0).getCountry();
+
+            TimetableRecord rec1 = new TimetableRecord();
+            TimetableRecord rec2 = new TimetableRecord();
+            TimetableRecord recar1 = new TimetableRecord();
+            TimetableRecord recar2 = new TimetableRecord();
+
+            if(a.getOrigin() > 0) {
+                rec1.setLogo(a.getAirline().getLogo());
+                rec1.setNumber(a.getAirline().getCode() + a.getNumber().toString());
+                rec1.setDirection(dir1);
+                rec1.setAirplane(a.getAirplane());
+                rec1.setTime(a.getTime());
+
+                rec2.setLogo(a.getAirline().getLogo());
+                Integer newnum = a.getNumber() + 1;
+                rec2.setNumber(a.getAirline().getCode() + newnum.toString());
+                rec2.setDirection(dir2);
+                rec2.setAirplane(a.getAirplane());
+                String newdepmn = newDepMinute.toString();
+                if(newdepmn.length() < 2) newdepmn = '0' + newdepmn;
+                String newdephn = newDepHour.toString();
+                if(newdephn.length() < 2) newdephn = '0' + newdephn;
+                rec2.setTime(newdephn + ':' + newdepmn);
+
+                recar1.setLogo(a.getAirline().getLogo());
+                recar1.setNumber(a.getAirline().getCode() + a.getNumber().toString());
+                recar1.setDirection(dir1);
+                recar1.setAirplane(a.getAirplane());
+                String norarh = orarh.toString();
+                if(norarh.length() < 2) norarh = '0' + norarh;
+                String norarm = orarm.toString();
+                if(norarm.length() < 2) norarm = '0' + norarm;
+                recar1.setTime(norarh + ':' + norarm);
+
+                recar2.setLogo(a.getAirline().getLogo());
+                Integer newnum1 = a.getNumber() + 1;
+                recar2.setNumber(a.getAirline().getCode() + newnum1.toString());
+                recar2.setDirection(dir2);
+                recar2.setAirplane(a.getAirplane());
+                String nnarh = narh.toString();
+                if(nnarh.length() < 2) nnarh = '0' + nnarh;
+                String nnarm = narm.toString();
+                if(nnarm.length() < 2) nnarm = '0' + nnarm;
+                recar2.setTime(nnarh + ':' + nnarm);
+
+            } else {
+                rec1.setLogo(a.getAirline().getLogo());
+                rec1.setNumber(a.getAirline().getCode() + a.getNumber().toString());
+                rec1.setDirection(dir2);
+                rec1.setAirplane(a.getAirplane());
+                rec1.setTime(a.getTime());
+
+                rec2.setLogo(a.getAirline().getLogo());
+                Integer newnum = a.getNumber() + 1;
+                rec2.setNumber(a.getAirline().getCode() + newnum.toString());
+                rec2.setDirection(dir1);
+                rec2.setAirplane(a.getAirplane());
+                String newdephn = newDepHour.toString();
+                if(newdephn.length() < 2) newdephn = '0' + newdephn;
+                String newdepmn = newDepMinute.toString();
+                if(newdepmn.length() < 2) newdepmn = '0' + newdepmn;
+                rec2.setTime(newdephn + ':' + newdepmn);
+
+                recar1.setLogo(a.getAirline().getLogo());
+                recar1.setNumber(a.getAirline().getCode() + a.getNumber().toString());
+                recar1.setDirection(dir2);
+                recar1.setAirplane(a.getAirplane());
+                String norarh = orarh.toString();
+                if(norarh.length() < 2) norarh = '0' + norarh;
+                String norarm = orarm.toString();
+                if(norarm.length() < 2) norarm = '0' + norarm;
+                recar1.setTime(norarh + ':' + norarm);
+
+                recar2.setLogo(a.getAirline().getLogo());
+                Integer newnum1 = a.getNumber() + 1;
+                recar2.setNumber(a.getAirline().getCode() + newnum1.toString());
+                recar2.setDirection(dir1);
+                recar2.setAirplane(a.getAirplane());
+                String nnarh = narh.toString();
+                if(nnarh.length() < 2) nnarh = '0' + nnarh;
+                String nnarm = narm.toString();
+                if(nnarm.length() < 2) nnarm = '0' + nnarm;
+                recar2.setTime(nnarh + ':' + nnarm);
+
+            }
+
+            String newdays1 = a.getDays();
+            String newdays2 = a.getDays();
+            if(daysparam1 > 0) {
+                newdays1 = incrementNumbers(newdays1);
+//                System.out.println("1: ");
+//                System.out.println(a.getAirline().getCode() + a.getNumber());
+            }
+            if(daysparam2 > 0) {
+//                System.out.println("2: ");
+                for(int k = 0; k < daysparam2; k++) {
+                    newdays2 = incrementNumbers(newdays2);
+//                    System.out.println(a.getAirline().getCode() + a.getNumber());
+                }
+            }
+
+            rec1.setDays(a.getDays());
+            rec2.setDays(a.getDays());
+            recar1.setDays(newdays1);
+            recar2.setDays(newdays2);
+            result.add(rec1);
+            result.add(rec2);
+            resultar.add(recar1);
+            resultar.add(recar2);
+
+//            if(a.getNumber() == 4867) {
+//                System.out.println(newdays1);
+//                System.out.println(newdays2);
+//                System.out.println(daysparam1);
+//                System.out.println(daysparam1_5);
+//                System.out.println(daysparam2);
+//            }
+
+        });
+
+        List<TimetableRecord> homedeps = new ArrayList<>();
+        List<TimetableRecord> homearrs = new ArrayList<>();
+
+        result.forEach(a -> {
+            Integer flHours = Integer.parseInt(a.getTime().split(":")[0]);
+            Integer flMinutes = Integer.parseInt(a.getTime().split(":")[1]);
+            Integer param = 0;
+            if(flHours < currentHour) param = -1;
+            else if (flHours > currentHour) param = 1;
+            else if (flMinutes < currentMinute) param = -1;
+            else  param = 1;
+            if(param < 0) {
+                Integer newh = flHours + 24;
+                a.setTime(newh.toString() + ':' + a.getTime().split(":")[1]);
+            };
+            if (param > 0) {
+                if(a.getDays().contains(currentDay.toString())){
+                    finalresult.add(a);
+                    if(a.getDirection().contains(homecode + " -> ")) {
+                        homedeps.add(a);
+                    }
+                };
+            } else {
+                Integer newday = currentDay + 1;
+                if (newday > 7) newday -= 7;
+                if(a.getDays().contains(newday.toString())){
+                    finalresult.add(a);
+                    if(a.getDirection().contains(homecode + " -> ")) {
+                        homedeps.add(a);
+                    }
+                };
+            };
+        });
+
+        List<TimetableRecord> finalarrs = new ArrayList<>();
+
+        resultar.forEach(a -> {
+            Integer flHours = Integer.parseInt(a.getTime().split(":")[0]);
+            Integer flMinutes = Integer.parseInt(a.getTime().split(":")[1]);
+            Integer param = 0;
+            if(flHours < currentHour) param = -1;
+            else if (flHours > currentHour) param = 1;
+            else if (flMinutes < currentMinute) param = -1;
+            else  param = 1;
+            if(param < 0) {
+                Integer newh = flHours + 24;
+                a.setTime(newh.toString() + ':' + a.getTime().split(":")[1]);
+            };
+            if (param > 0) {
+                if(a.getDays().contains(currentDay.toString())){
+                    finalarrs.add(a);
+                    if(a.getDirection().contains(" -> " + homecode)) {
+                        homearrs.add(a);
+                    }
+                };
+            } else {
+                Integer newday = currentDay + 1;
+                if (newday > 7) newday -= 7;
+                if(a.getDays().contains(newday.toString())){
+                    finalarrs.add(a);
+                    if(a.getDirection().contains(" -> " + homecode)) {
+                        homearrs.add(a);
+                    }
+                };
+            };
+        });
+
+        Collections.sort(finalresult, new Comparator<TimetableRecord>() {
+            public int compare(TimetableRecord o1, TimetableRecord o2) {
+                return o1.getTime().compareTo(o2.getTime());
+            }
+        });
+        Collections.sort(homedeps, new Comparator<TimetableRecord>() {
+            public int compare(TimetableRecord o1, TimetableRecord o2) {
+                return o1.getTime().compareTo(o2.getTime());
+            }
+        });
+        Collections.sort(finalarrs, new Comparator<TimetableRecord>() {
+            public int compare(TimetableRecord o1, TimetableRecord o2) {
+                return o1.getTime().compareTo(o2.getTime());
+            }
+        });
+        Collections.sort(homearrs, new Comparator<TimetableRecord>() {
+            public int compare(TimetableRecord o1, TimetableRecord o2) {
+                return o1.getTime().compareTo(o2.getTime());
+            }
+        });
+
+        Integer tablenum = 20;
+
+        List<TimetableRecord> finalalldeps = finalresult.subList(0, tablenum);
+        List<TimetableRecord> finalhomedeps = homedeps.subList(0, tablenum);
+        List<TimetableRecord> finalallarrs = finalarrs.subList(0, tablenum);
+        List<TimetableRecord> finalhomearrs = homearrs.subList(0, tablenum);
+
+        finalalldeps.forEach(a -> {
+            Integer flHours = Integer.parseInt(a.getTime().split(":")[0]);
+            if (flHours > 23) flHours -= 24;
+            String newfh = flHours.toString();
+            if (newfh.length() < 2) newfh = '0' + newfh;
+            a.setTime(newfh + ':' + a.getTime().split(":")[1]);
+        });
+        finalhomedeps.forEach(a -> {
+            Integer flHours = Integer.parseInt(a.getTime().split(":")[0]);
+            if (flHours > 23) flHours -= 24;
+            String newfh = flHours.toString();
+            if (newfh.length() < 2) newfh = '0' + newfh;
+            a.setTime(newfh + ':' + a.getTime().split(":")[1]);
+        });
+        finalallarrs.forEach(a -> {
+            Integer flHours = Integer.parseInt(a.getTime().split(":")[0]);
+            if (flHours > 23) flHours -= 24;
+            String newfh = flHours.toString();
+            if (newfh.length() < 2) newfh = '0' + newfh;
+            a.setTime(newfh + ':' + a.getTime().split(":")[1]);
+        });
+        finalhomearrs.forEach(a -> {
+            Integer flHours = Integer.parseInt(a.getTime().split(":")[0]);
+            if (flHours > 23) flHours -= 24;
+            String newfh = flHours.toString();
+            if (newfh.length() < 2) newfh = '0' + newfh;
+            a.setTime(newfh + ':' + a.getTime().split(":")[1]);
+        });
+
+        response.add(finalalldeps);
+        response.add(finalhomedeps);
+        response.add(finalallarrs);
+        response.add(finalhomearrs);
+
+        return response;
+    }
+
+    public List<Search> getForBooking(String destination, Integer amount, String date, Integer origin) {
+
+        LocalDate wdate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+        DayOfWeek dayOfWeek = wdate.getDayOfWeek();
+        Integer flightday = dayOfWeek.getValue();
+        Float homecoord1 = dbService.getAllAirportsWithId().get(0).getCoord1();
+        Float homecoord2 = dbService.getAllAirportsWithId().get(0).getCoord2();
+        String homecode = dbService.getAllAirportsWithId().get(0).getCountry();
+        Integer speed = 900;
+
+        List<Flight> response = new ArrayList<>();
+
+        List<Flight> allflights = dbService.getAllFlights();
+        List<Search> goodflights = new ArrayList<>();
+
+        allflights.forEach(a -> {
+            if(a.getDestination().getCountry().equals(destination)) {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    Integer ordepHours = Integer.parseInt(a.getTime().split(":")[0]);
+                    Integer ordepMinutes = Integer.parseInt(a.getTime().split(":")[1]);
+                    String airport = a.getDestination().getCountry();
+                    Integer airportId = dbService.getAirportId(airport);
+                    Float destcoord1 = dbService.getAirportWithId(airportId).getCoord1();
+                    Float destcoord2 = dbService.getAirportWithId(airportId).getCoord2();
+                    Double totaldistance0 = calculateDistance(homecoord1.doubleValue(),
+                            homecoord2.doubleValue(), destcoord1.doubleValue(), destcoord2.doubleValue());
+                    Float totaldistance = totaldistance0.floatValue();
+                    Float flightTimeHours = totaldistance / speed;
+                    Integer flHours = (int)Math.floor(flightTimeHours);
+                    Integer flMinutes = Math.round((flightTimeHours - flHours) * 60);
+                    Integer newDepHour = ordepHours + flHours + 2;
+                    Integer newDepMinute = ordepMinutes + flMinutes;
+                    Integer daysparam1 = 0;
+                    Integer daysparam1_5 = 0;
+                    Integer daysparam2 = 0;
+
+                    if(newDepMinute > 59) {
+                        newDepMinute -= 60;
+                        newDepHour ++;
+                    };
+                    if(newDepHour > 23) {
+                        newDepHour -= 24;
+                        daysparam1_5 = 1;
+                        daysparam1 = 1;
+                        daysparam2 = 1;
+                    };
+
+                    Integer orarh = newDepHour - 2;
+                    if(orarh < 0) {
+                        orarh += 24;
+                        daysparam1 = 0;
+                    }
+                    Integer orarm = newDepMinute;
+                    Integer narh = newDepHour + flHours;
+                    Integer narm = newDepMinute + flMinutes;
+                    if(narm > 59) {
+                        narm -= 60;
+                        narh ++;
+                    };
+                    if(narh > 23) {
+                        narh -= 24;
+                        daysparam2 = daysparam1_5 + 1;
+                    };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if(origin > 0) {
+                    if(a.getOrigin() > 0) {
+                        if(a.getDays().contains(flightday.toString())) {
+                            String newflh = flHours.toString();
+                            if(newflh.length() < 2) newflh = '0' + newflh;
+                            String newflm = flMinutes.toString();
+                            if(newflm.length() < 2) newflm = '0' + newflm;
+                            Search b = new Search(a.getDestination().getName(), homecode + " -> " + a.getDestination().getCountry(),
+                                    a.getAirline().getName(), a.getAirline().getCode() + a.getNumber().toString(),
+                                    a.getTime(), a.getAirline().getLogo(),
+                                    (float)(Math.round(a.getPrice() * amount * 100.0) / 100.0),
+                                    newflh + ':' + newflm, a.getAirplane(), date);
+                            goodflights.add(b);
+                        }
+                    } else {
+                        if(daysparam1_5 > 0) {
+                            a.setDays(incrementNumbers(a.getDays()));
+                        }
+                        Integer newnum = a.getNumber() + 1;
+                        if(a.getDays().contains(flightday.toString())) {
+                            String newflh = flHours.toString();
+                            if(newflh.length() < 2) newflh = '0' + newflh;
+                            String newflm = flMinutes.toString();
+                            if(newflm.length() < 2) newflm = '0' + newflm;
+                            String newdeph = newDepHour.toString();
+                            if(newdeph.length() < 2) newdeph = '0' + newdeph;
+                            String newdepm = newDepMinute.toString();
+                            if(newdepm.length() < 2) newdepm = '0' + newdepm;
+                            Search b = new Search(a.getDestination().getName(), homecode + " -> " + a.getDestination().getCountry(),
+                                    a.getAirline().getName(), a.getAirline().getCode() + newnum.toString(),
+                                    newdeph + ':' + newdepm, a.getAirline().getLogo(),
+                                    (float)(Math.round(a.getPrice() * amount * 100.0) / 100.0),
+                                    newflh + ':' + newflm, a.getAirplane(), date);
+                            goodflights.add(b);
+                        }
+                    }
+                } else {
+                    if(a.getOrigin() > 0) {
+                        if(daysparam1_5 > 0) {
+                            a.setDays(incrementNumbers(a.getDays()));
+                        }
+                        Integer newnum = a.getNumber() + 1;
+                        if(a.getDays().contains(flightday.toString())) {
+                            String newflh = flHours.toString();
+                            if(newflh.length() < 2) newflh = '0' + newflh;
+                            String newflm = flMinutes.toString();
+                            if(newflm.length() < 2) newflm = '0' + newflm;
+                            String newdeph = newDepHour.toString();
+                            if(newdeph.length() < 2) newdeph = '0' + newdeph;
+                            String newdepm = newDepMinute.toString();
+                            if(newdepm.length() < 2) newdepm = '0' + newdepm;
+                            Search b = new Search(a.getDestination().getName(), a.getDestination().getCountry() + " -> " + homecode,
+                                    a.getAirline().getName(), a.getAirline().getCode() + newnum.toString(),
+                                    newdeph + ':' + newdepm, a.getAirline().getLogo(),
+                                    (float)(Math.round(a.getPrice() * amount * 100.0) / 100.0),
+                                    newflh + ':' + newflm, a.getAirplane(), date);
+                            goodflights.add(b);
+                        }
+                    } else {
+                        if(a.getDays().contains(flightday.toString())) {
+                            String newflh = flHours.toString();
+                            if(newflh.length() < 2) newflh = '0' + newflh;
+                            String newflm = flMinutes.toString();
+                            if(newflm.length() < 2) newflm = '0' + newflm;
+                            Search b = new Search(a.getDestination().getName(), a.getDestination().getCountry() + " -> " + homecode,
+                                    a.getAirline().getName(), a.getAirline().getCode() + a.getNumber().toString(),
+                                    a.getTime(), a.getAirline().getLogo(), (float)(Math.round(a.getPrice() * amount * 100.0) / 100.0),
+                                    newflh + ':' + newflm, a.getAirplane(), date);
+                            goodflights.add(b);
+                        }
+                    }
+                }
+            }
+        });
+
+        Collections.sort(goodflights, new Comparator<Search>() {
+            public int compare(Search o1, Search o2) {
+                return o1.getTime().compareTo(o2.getTime());
+            }
+        });
+
+        return goodflights;
     }
 }

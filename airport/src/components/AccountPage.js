@@ -9,14 +9,20 @@ import AirlineForm from './AirlineForm.js'
 import AirlineDelForm from './AirlineDelForm.js'
 import FlightForm from './FlightForm.js'
 import FlightDelForm from './FlightDelForm.js'
+import ImageForm from './ImageForm.js'
 
 export default function AccountPage() {
+
+    console.log("xxxyyy");
+    console.log(useContext(AuthContext));
 
     const { user, setUser } = useContext(AuthContext);
 
     const [coords, setCoords] = useState([]);
 
-    const getCoords = (email) => {
+    var mailing = 0;
+
+    const getBookings = (email) => {
         const params = {
             email: user.email,
         };
@@ -35,7 +41,7 @@ export default function AccountPage() {
 
     const HandleViewClick = (event) => {
         event.preventDefault();
-        getCoords(user.email).then(data => {
+        getBookings(user.email).then(data => {
             console.log(data);
             console.log(coords);
         });
@@ -76,6 +82,7 @@ export default function AccountPage() {
             {user && !user.isAdmin && (
                 <div className="acccontainer">
                     <div>
+                        <h1 className='welcome'>Welcome, {user.email}!</h1>
                         <button className="authbutton" type="submit" onClick={() => {
                             if (!isClicked) {
                                 setIsClicked(true);
@@ -121,6 +128,9 @@ export default function AccountPage() {
                     <div className="airportaction">
                         <FlightForm />
                         <FlightDelForm />
+                    </div>
+                    <div className="airportaction">
+                        <ImageForm />
                     </div>
                 </div>
             )}
